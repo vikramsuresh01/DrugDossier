@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrugDossier - Supplements Database</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Bundle (JS and Popper.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom CSS -->
+  <style>
+    body{
+        background-color: #360034;
+      }
+    .product-list {
+      margin-bottom: 20px;
+    }
+    .product-list .card {
+      background-color: #333;
+      border-color: #333;
+      margin-bottom: 10px;
+    }
+    .product-list .card-title {
+      color: #fff;
+    }
+    .product-list .card-text {
+      color: #ccc;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #531150;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">DrugDossier</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              
+              <li class="nav-item dropdown" >
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Substances
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="narcotics.html">Narcotics</a></li>
+                  <li><a class="dropdown-item" href="prescriptions.html">Prescriptions</a></li>
+                  <li><a class="dropdown-item" href="supplements.html">Supplements</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="review.html">Write a review</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="blog.html">Forum</a>
+              </li>
+            </ul>
+            {% if authenticated_users %}
+            <form action="/logout" class="d-flex" role="search">
+              <button class="btn btn-outline-danger" type="submit">Logout</button>
+            </form>
+            {% else %}
+            <form action="/login.html" class="d-flex" role="search">
+              <button class="btn btn-outline-light" type="submit">Log In</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+
+  <div class="container">
+    <h1 class="mt-5 mb-4 text-center">Supplements Database</h1>
+    <div class="row">
+      <div class="col">
+        <h2 class="text-center">Skincare</h2>
+        <div class="product-list">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Moisturizer</h5>
+              <p class="card-text">Hydrates and softens the skin, typically used after cleansing or before applying makeup.</p>
+              <a href="moisturizer.html" class="btn btn-primary">View More</a>
+            </div>
+          </div>
+          <!-- Add more Skincare product cards as needed -->
+        </div>
+      </div>
+      <div class="col">
+        <h2 class="text-center">Makeup</h2>
+        <div class="product-list">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Foundation</h5>
+              <p class="card-text">Evenly tones the complexion and provides a base for other makeup products.</p>
+              <a href="foundation.html" class="btn btn-primary">View More</a>
+            </div>
+          </div>
+          <!-- Add more Makeup product cards as needed -->
+        </div>
+      </div>
+      <div class="col">
+        <h2 class="text-center">Haircare</h2>
+        <div class="product-list">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Shampoo</h5>
+              <p class="card-text">Cleanses the hair and scalp by removing dirt, oil, and other impurities.</p>
+              <a href="foundation.html" class="btn btn-primary">View More</a>
+            </div>
+          </div>
+          <!-- Add more Makeup product cards as needed -->
+        </div>
+      </div>
