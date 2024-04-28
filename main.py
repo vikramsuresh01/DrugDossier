@@ -3,11 +3,12 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+from datetime import datetime
 
 from pymongo import MongoClient
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="templates")      
 
 # Define the directory path to the 'static' directory
 current_dir = Path(__file__).resolve().parent
@@ -22,7 +23,11 @@ collection = db.login_creds
 
 db2 = client.substances
 collection2 = db2.narcotics
+collection3 = db2.prescriptions
+collection4 = db2.supplements
 
+db3 = client.reviews
+collection5 = db3.review
 
 authenticated_users = set()
 
@@ -42,20 +47,36 @@ async def read_narcotics(request: Request,authenticated_users: set = Depends(get
     dataset = list(collection2.find({}))
     return templates.TemplateResponse("narcotics.html", {"request": request,"authenticated_users": authenticated_users,"dataset": dataset})
 
-@app.get("/substance/{drug_name}", response_class=HTMLResponse)
+@app.get("/narcotics/{drug_name}.html", response_class=HTMLResponse)
 async def read_substance(drug_name: str, request: Request, authenticated_users: set = Depends(get_authenticated_users)):
     # Fetch substance data from MongoDB based on the drug_name
     substance_data = collection2.find_one({"drug_name": drug_name})
     # Pass substance data to the template
-    return templates.TemplateResponse("substance_page.html", {"request": request, "substance_data": substance_data})
+    return templates.TemplateResponse("substance_page.html", {"request": request,"authenticated_users": authenticated_users,"substance_data": substance_data})
+
+@app.get("/prescriptions/{drug_name}.html", response_class=HTMLResponse)
+async def read_substance(drug_name: str, request: Request, authenticated_users: set = Depends(get_authenticated_users)):
+    # Fetch substance data from MongoDB based on the drug_name
+    substance_data = collection3.find_one({"drug_name": drug_name})
+    # Pass substance data to the template
+    return templates.TemplateResponse("substance_page.html", {"request": request,"authenticated_users": authenticated_users,"substance_data": substance_data})
+
+@app.get("/supplements/{drug_name}.html", response_class=HTMLResponse)
+async def read_substance(drug_name: str, request: Request, authenticated_users: set = Depends(get_authenticated_users)):
+    # Fetch substance data from MongoDB based on the drug_name
+    substance_data = collection4.find_one({"drug_name": drug_name})
+    # Pass substance data to the template
+    return templates.TemplateResponse("substance_page.html", {"request": request,"authenticated_users": authenticated_users,"substance_data": substance_data})
 
 @app.get("/prescriptions.html", response_class=HTMLResponse)
 async def read_prescriptions(request: Request,authenticated_users: set = Depends(get_authenticated_users)):
-    return templates.TemplateResponse("prescriptions.html", {"request": request,"authenticated_users": authenticated_users})
+    dataset = list(collection3.find({}))
+    return templates.TemplateResponse("prescriptions.html", {"request": request,"authenticated_users": authenticated_users,"dataset": dataset})
 
 @app.get("/supplements.html", response_class=HTMLResponse)
 async def read_supplements(request: Request,authenticated_users: set = Depends(get_authenticated_users)):
-    return templates.TemplateResponse("supplements.html", {"request": request,"authenticated_users": authenticated_users})
+    dataset = list(collection4.find({}))
+    return templates.TemplateResponse("supplements.html", {"request": request,"authenticated_users": authenticated_users,"dataset": dataset})
 
 @app.get("/blog.html", response_class=HTMLResponse)
 async def read_blog(request: Request,authenticated_users: set = Depends(get_authenticated_users)):
@@ -63,7 +84,11 @@ async def read_blog(request: Request,authenticated_users: set = Depends(get_auth
 
 @app.get("/review.html", response_class=HTMLResponse)
 async def read_review(request: Request,authenticated_users: set = Depends(get_authenticated_users)):
-    return templates.TemplateResponse("review.html", {"request": request,"authenticated_users": authenticated_users})
+    if request.client.host in authenticated_users:
+        # If the user is authenticated, render a different template
+        return templates.TemplateResponse("review.html", {"request": request,"authenticated_users": authenticated_users})
+    else:
+        return templates.TemplateResponse("signin.html", {"request": request,"authenticated_users": authenticated_users})
 
 @app.get("/login.html", response_class=HTMLResponse)
 async def read_login(request: Request):
@@ -137,5 +162,31 @@ async def process_signin(request: Request,email: str = Form(...), password: str 
     else:
         print("Fail")
         return templates.TemplateResponse("login.html", {"request": request, "error_message": "Wrong email or password."})
+    
+@app.post("/submit_review")
+async def submit_review(request: Request, email: str = Form(...), substanceType: str = Form(...), drugName: str = Form(...), reviewText: str = Form(...)):
+    # Create a new document with the form data
+    review_doc = {
+        "email": email,
+        "substanceType": substanceType,
+        "drugName": drugName,
+        "reviewText": reviewText,
+        "timestamp": datetime.utcnow()
+    }
+
+    # Insert the document into the MongoDB collection
+    collection5.insert_one(review_doc)
+
+    # Return a response indicating success
+    return templates.TemplateResponse("authenticated_home.html", {"request": request})
+
+@app.get("/reviews.html", response_class=HTMLResponse)
+async def get_reviews(request: Request):
+    # Fetch reviews from MongoDB
+    if request.client.host in authenticated_users:
+        reviews = list(collection5.find({}))
+        return templates.TemplateResponse("reviews.html", {"request": request, "reviews": reviews,"authenticated_users": authenticated_users})
+    else:
+        return templates.TemplateResponse("signin.html", {"request": request,"authenticated_users": authenticated_users})
     
 

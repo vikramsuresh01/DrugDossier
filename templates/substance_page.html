@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DrugDossier - Narcotics Database</title>
+  <title>DrugDossier - {{ substance_data.drug_name }} Database</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Bundle (JS and Popper.js) -->
@@ -14,18 +14,18 @@
     body{
         background-color: #360034;
       }
-    .substance-list {
+    .substance-details {
       margin-bottom: 20px;
     }
-    .substance-list .card {
+    .substance-details .card {
       background-color: #531150;
       border-color: #531150;
       margin-bottom: 10px;
     }
-    .substance-list .card-title {
+    .substance-details .card-title {
       color: #fff;
     }
-    .substance-list .card-text {
+    .substance-details .card-text {
       color: #ccc;
     }
     .btn-primary {
@@ -53,15 +53,15 @@
                   Substances
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="narcotics.html">Narcotics</a></li>
-                  <li><a class="dropdown-item" href="prescriptions.html">Prescriptions</a></li>
-                  <li><a class="dropdown-item" href="supplements.html">Supplements</a></li>
+                  <li><a class="dropdown-item" href="/narcotics.html">Narcotics</a></li>
+                  <li><a class="dropdown-item" href="/prescriptions.html">Prescriptions</a></li>
+                  <li><a class="dropdown-item" href="/supplements.html">Supplements</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="review.html">Write a review</a></li>
+                  <li><a class="dropdown-item" href="/review.html">Write a review</a></li>
                 </ul>
               </li>
               <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="blog.html">Forum</a>
+                  <a class="nav-link active" aria-current="page" href="/reviews.html">Forum</a>
               </li>
             </ul>
             {% if authenticated_users %}
@@ -76,28 +76,91 @@
           </div>
         </div>
       </nav>
-      
 
     <div class="container">
         <h1 class="mt-5 mb-4 text-center">{{ substance_data.drug_name }} Details</h1>
         <div class="row">
             <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Category</h5>
-                        <p class="card-text">{{ substance_data.category }}</p>
+                <div class="substance-details">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Description</h5>
+                            <p class="card-text">{{ substance_data.description }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Chemical Structure</h5>
-                        <p class="card-text">{{ substance_data.chemical_structure }}</p>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Category</h5>
+                            <p class="card-text">{{ substance_data.category }}</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Add more cards for displaying other details -->
-            </div>
-        </div>
-    </div>
-    
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Chemical Structure</h5>
+                            <p class="card-text">{{ substance_data.chemical_structure }}</p>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Route of Administration</h5>
+                            <ul class="list-group">
+                                {% for route in substance_data.route_of_administration %}
+                                <li class="list-group-item">{{ route }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Effects</h5>
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="card-subtitle mb-2 text-muted">Physiological</h6>
+                                    <ul class="list-group">
+                                        {% for effect in substance_data.effects.physiological %}
+                                        <li class="list-group-item">{{ effect }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="col">
+                                    <h6 class="card-subtitle mb-2 text-muted">Psychological</h6>
+                                    <ul class="list-group">
+                                        {% for effect in substance_data.effects.psychological %}
+                                        <li class="list-group-item">{{ effect }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">   
+                            <h5 class="card-title">Risks and Side Effects</h5>
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="card-subtitle mb-2 text-muted">Short Term</h6>
+                                    <ul class="list-group">
+                                        {% for risk in substance_data.risks_and_side_effects.short_term %}
+                                        <li class="list-group-item">{{ risk }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="col">
+                                    <h6 class="card-subtitle mb-2 text-muted">Long Term</h6>
+                                    <ul class="list-group">
+                                        {% for risk in substance_data.risks_and_side_effects.long_term %}
+                                        <li class="list-group-item">{{ risk }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Legal Status</h5>
+                            <p class="card-text">{{ substance_data.legal_status }}</p>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class

@@ -1,42 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DrugDossier - Narcotics Database</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Bundle (JS and Popper.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Custom CSS -->
-  <style>
-    body{
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
         background-color: #360034;
       }
-    .substance-list {
-      margin-bottom: 20px;
-    }
-    .substance-list .card {
-      background-color: #531150;
-      border-color: #531150;
-      margin-bottom: 10px;
-    }
-    .substance-list .card-title {
-      color: #fff;
-    }
-    .substance-list .card-text {
-      color: #ccc;
-    }
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-    .btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #0056b3;
-    }
-  </style>
+      .card-body{
+        background-color: #531150;
+      }
+
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg" style="background-color: #531150;">
@@ -76,24 +54,25 @@
           </div>
         </div>
       </nav>
-      
-
-      <div class="container">
-        <h1 class="mt-5 mb-4 text-center">Prescriptions Database</h1>
-        <div class="row substance-list">
-            {% for item in dataset %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Forum</h1>
+        <div class="row">
+            {% for review in reviews %}
             <div class="col-md-4">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">{{ item.drug_name }}</h5>
-                        <p class="card-text">{{ item.category }}</p>
-                        <a href="/prescriptions/{{ item.drug_name }}.html" class="btn btn-light btn-sm">View More</a>
+                        <h5 class="card-title">{{ review.drugName }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ review.substanceType }}</h6>
+                        <p class="card-text">{{ review.reviewText }}</p>
+                        <p class="card-text"><small class="text-muted">Submitted by: {{ review.email }}</small></p>
+                        <p class="card-text"><small class="text-muted">Timestamp: {{ review.timestamp }}</small></p>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
-    
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
